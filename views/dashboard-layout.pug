@@ -1,0 +1,29 @@
+extends layout
+
+block content 
+    div
+        header.app-header.navbar
+            a.navbar-brand(href="#") 
+                |   Video conference app
+            ul.nav.navbar-nav.ml-auto
+                li.nav-item.dropdown
+                    a.nav-link.dropdown-toggle.nav-link(data-toggle='dropdown', href='#', role='button', aria-haspopup='true', aria-expanded='false')
+                        img.img-avatar(src=user.picture, alt=email)
+                        span.d-md-down-none #{user.nickname}
+                    div.dropdown-menu.dropdown-menu-right
+                        div.dropdown-header.text-center
+                            strong Account
+                        a.dropdown-item(href='/logout')
+                            i.fa.fa-lock
+                            |  Logout
+    div.app-body
+        div.sidebar
+            nav.sidebar-nav
+                ul.nav
+                    li.nav-item
+                        //- a.nav-link(href='#')
+                        //-     i.icon-speedometer
+                        //-     |   Dashboard
+        main.main
+            div.container-fluid
+                block primary

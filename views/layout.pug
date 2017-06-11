@@ -1,0 +1,21 @@
+doctype html
+html
+  head
+    title= title
+    //- link(rel='stylesheet', href='/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/css/style.css')
+    link(rel='stylesheet', href='/css/core-ui.css')
+    link(rel='stylesheet', href='/css/font-awesome.min.css')
+    script(src="https://cdn.auth0.com/js/lock/10.16/lock.min.js")
+    // auth0.js
+    script(src="https://cdn.auth0.com/js/auth0/8.7/auth0.min.js")
+  body.app.header-fixed.sidebar-fixed.aside-menu-fixed.aside-menu-hidden
+    block content
+    block scripts
+      script(src="js/jquery.min.js")
+      script(src="js/RTCMultiConnection.js")
+      script(src="https://rtcmulticonnection.herokuapp.com/socket.io/socket.io.js")
+      script(src="https://cdn.WebRTC-Experiment.com/RecordRTC.js")
+      script(src="js/video-broadcast.js")
+      script(src="js/script.js")
+      script(src="js/bootstrap.min.js")
