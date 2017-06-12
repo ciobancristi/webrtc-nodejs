@@ -20,6 +20,16 @@
 .experiment{
     margin-top: 40px;
 }
+
+#video-preview{
+    margin: auto;
+    width: 60%;
+    height: 500px;
+}
+
+#btn-stop-recording{
+    margin-left: 15px;
+}
 /*.form-signin {
             margin-top: 150px;
             max-width: 330px;
