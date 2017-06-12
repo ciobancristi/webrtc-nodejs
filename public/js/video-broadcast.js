@@ -282,74 +282,74 @@ function disableInputButtons() {
 // ......................Handling broadcast-id................
 // ......................................................
 
-function showRoomURL(broadcastId) {
-    var roomHashURL = '#' + broadcastId;
-    var roomQueryStringURL = '?simple=true&broadcastId=' + broadcastId;
+// function showRoomURL(broadcastId) {
+//     var roomHashURL = '#' + broadcastId;
+//     var roomQueryStringURL = '?simple=true&broadcastId=' + broadcastId;
 
-    var html = '<h2>Unique URL for your room:</h2><br>';
+//     var html = '<h2>Unique URL for your room:</h2><br>';
 
-    html += 'Hash URL: <a href="' + roomHashURL + '" target="_blank">' + roomHashURL + '</a>';
-    html += '<br>';
-    html += 'QueryString URL: <a href="' + roomQueryStringURL + '" target="_blank">' + roomQueryStringURL + '</a>';
+//     html += 'Hash URL: <a href="' + roomHashURL + '" target="_blank">' + roomHashURL + '</a>';
+//     html += '<br>';
+//     html += 'QueryString URL: <a href="' + roomQueryStringURL + '" target="_blank">' + roomQueryStringURL + '</a>';
 
-    var roomURLsDiv = document.getElementById('room-urls');
-    roomURLsDiv.innerHTML = html;
+//     var roomURLsDiv = document.getElementById('room-urls');
+//     roomURLsDiv.innerHTML = html;
 
-    roomURLsDiv.style.display = 'block';
-}
+//     roomURLsDiv.style.display = 'block';
+// }
 
-(function () {
-    var params = {},
-        r = /([^&=]+)=?([^&]*)/g;
+// (function () {
+//     var params = {},
+//         r = /([^&=]+)=?([^&]*)/g;
 
-    function d(s) {
-        return decodeURIComponent(s.replace(/\+/g, ' '));
-    }
-    var match, search = window.location.search;
-    while (match = r.exec(search.substring(1)))
-        params[d(match[1])] = d(match[2]);
-    window.params = params;
-})();
+//     function d(s) {
+//         return decodeURIComponent(s.replace(/\+/g, ' '));
+//     }
+//     var match, search = window.location.search;
+//     while (match = r.exec(search.substring(1)))
+//         params[d(match[1])] = d(match[2]);
+//     window.params = params;
+// })();
 
-var broadcastId = '';
-if (localStorage.getItem(connection.socketMessageEvent)) {
-    broadcastId = localStorage.getItem(connection.socketMessageEvent);
-} else {
-    broadcastId = connection.token();
-}
-document.getElementById('broadcast-id').value = broadcastId;
-document.getElementById('broadcast-id').onkeyup = function () {
-    localStorage.setItem(connection.socketMessageEvent, this.value);
-};
+// var broadcastId = '';
+// if (localStorage.getItem(connection.socketMessageEvent)) {
+//     broadcastId = localStorage.getItem(connection.socketMessageEvent);
+// } else {
+//     broadcastId = connection.token();
+// }
+// document.getElementById('broadcast-id').value = broadcastId;
+// document.getElementById('broadcast-id').onkeyup = function () {
+//     localStorage.setItem(connection.socketMessageEvent, this.value);
+// };
 
-var hashString = location.hash.replace('#', '');
-if (hashString.length && hashString.indexOf('comment-') == 0) {
-    hashString = '';
-}
+// var hashString = location.hash.replace('#', '');
+// if (hashString.length && hashString.indexOf('comment-') == 0) {
+//     hashString = '';
+// }
 
-var broadcastId = params.broadcastId;
-if (!broadcastId && hashString.length) {
-    broadcastId = hashString;
-}
+// var broadcastId = params.broadcastId;
+// if (!broadcastId && hashString.length) {
+//     broadcastId = hashString;
+// }
 
-if (broadcastId && broadcastId.length) {
-    document.getElementById('broadcast-id').value = broadcastId;
-    localStorage.setItem(connection.socketMessageEvent, broadcastId);
+// if (broadcastId && broadcastId.length) {
+//     document.getElementById('broadcast-id').value = broadcastId;
+//     localStorage.setItem(connection.socketMessageEvent, broadcastId);
 
-    // auto-join-room
-    (function reCheckRoomPresence() {
-        connection.checkPresence(broadcastId, function (isRoomExists) {
-            if (isRoomExists) {
-                document.getElementById('open-or-join').onclick();
-                return;
-            }
+//     // auto-join-room
+//     (function reCheckRoomPresence() {
+//         connection.checkPresence(broadcastId, function (isRoomExists) {
+//             if (isRoomExists) {
+//                 document.getElementById('open-or-join').onclick();
+//                 return;
+//             }
 
-            setTimeout(reCheckRoomPresence, 5000);
-        });
-    })();
+//             setTimeout(reCheckRoomPresence, 5000);
+//         });
+//     })();
 
-    disableInputButtons();
-}
+//     disableInputButtons();
+// }
 
 // below section detects how many users are viewing your broadcast
 
