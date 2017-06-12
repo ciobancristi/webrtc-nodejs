@@ -1,5 +1,4 @@
 node_modules/
-.env
 npm-debug.log
 
 # Created by https://www.gitignore.io/api/node,visualstudiocode
@@ -61,8 +60,6 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
-.env
 
 
 ### VisualStudioCode ###
