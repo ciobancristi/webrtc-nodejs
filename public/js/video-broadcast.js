@@ -205,37 +205,39 @@ connection.onstreamended = function () { };
 
 //connection.onleave = 
 // TODO: change logic
-// document.getElementById('btn-stop-recording').onclick = function (event) {
-//     //if (event.userid !== videoPreview.userid) return;
+document.getElementById('btn-stop-recording').onclick = function (event) {
 
-//     var socket = connection.getSocket();
-//     socket.emit('can-not-relay-broadcast');
+    if (!enableRecordings) return;
+    //if (event.userid !== videoPreview.userid) return;
 
-//     connection.isUpperUserLeft = true;
+    var socket = connection.getSocket();
+    socket.emit('can-not-relay-broadcast');
 
-//     if (allRecordedBlobs.length) {
-//         // playing lats recorded blob
-//         var lastBlob = allRecordedBlobs[allRecordedBlobs.length - 1];
-//         videoPreview.src = URL.createObjectURL(lastBlob);
-//         videoPreview.play();
-//         allRecordedBlobs = [];
-//     }
-//     else if (connection.currentRecorder) {
-//         var recorder = connection.currentRecorder;
-//         connection.currentRecorder = null;
-//         recorder.stopRecording(function () {
-//             if (!connection.isUpperUserLeft) return;
+    connection.isUpperUserLeft = true;
 
-//             videoPreview.src = URL.createObjectURL(recorder.blob);
-//             videoPreview.play();
-//         });
-//     }
+    if (allRecordedBlobs.length) {
+        // playing lats recorded blob
+        var lastBlob = allRecordedBlobs[allRecordedBlobs.length - 1];
+        videoPreview.src = URL.createObjectURL(lastBlob);
+        videoPreview.play();
+        allRecordedBlobs = [];
+    }
+    else if (connection.currentRecorder) {
+        var recorder = connection.currentRecorder;
+        connection.currentRecorder = null;
+        recorder.stopRecording(function () {
+            if (!connection.isUpperUserLeft) return;
 
-//     if (connection.currentRecorder) {
-//         connection.currentRecorder.stopRecording();
-//         connection.currentRecorder = null;
-//     }
-// };
+            videoPreview.src = URL.createObjectURL(recorder.blob);
+            videoPreview.play();
+        });
+    }
+
+    if (connection.currentRecorder) {
+        connection.currentRecorder.stopRecording();
+        connection.currentRecorder = null;
+    }
+};
 
 var allRecordedBlobs = [];
 
@@ -249,9 +251,9 @@ function repeatedlyRecordStream(stream) {
     });
 
     connection.currentRecorder.startRecording();
-    
+
     var recordingTime = 30 * 1000; // 30-seconds
-    
+
     setTimeout(function () {
         if (connection.isUpperUserLeft || !connection.currentRecorder) {
             return;
@@ -267,7 +269,7 @@ function repeatedlyRecordStream(stream) {
             connection.currentRecorder = null;
             repeatedlyRecordStream(stream);
         });
-    }, recordingTime); 
+    }, recordingTime);
 };
 
 // TODO: must change
