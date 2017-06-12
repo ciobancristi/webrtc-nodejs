@@ -205,37 +205,37 @@ connection.onstreamended = function () { };
 
 //connection.onleave = 
 // TODO: change logic
-document.getElementById('btn-stop-recording').onclick = function (event) {
-    //if (event.userid !== videoPreview.userid) return;
+// document.getElementById('btn-stop-recording').onclick = function (event) {
+//     //if (event.userid !== videoPreview.userid) return;
 
-    var socket = connection.getSocket();
-    socket.emit('can-not-relay-broadcast');
+//     var socket = connection.getSocket();
+//     socket.emit('can-not-relay-broadcast');
 
-    connection.isUpperUserLeft = true;
+//     connection.isUpperUserLeft = true;
 
-    if (allRecordedBlobs.length) {
-        // playing lats recorded blob
-        var lastBlob = allRecordedBlobs[allRecordedBlobs.length - 1];
-        videoPreview.src = URL.createObjectURL(lastBlob);
-        videoPreview.play();
-        allRecordedBlobs = [];
-    }
-    else if (connection.currentRecorder) {
-        var recorder = connection.currentRecorder;
-        connection.currentRecorder = null;
-        recorder.stopRecording(function () {
-            if (!connection.isUpperUserLeft) return;
+//     if (allRecordedBlobs.length) {
+//         // playing lats recorded blob
+//         var lastBlob = allRecordedBlobs[allRecordedBlobs.length - 1];
+//         videoPreview.src = URL.createObjectURL(lastBlob);
+//         videoPreview.play();
+//         allRecordedBlobs = [];
+//     }
+//     else if (connection.currentRecorder) {
+//         var recorder = connection.currentRecorder;
+//         connection.currentRecorder = null;
+//         recorder.stopRecording(function () {
+//             if (!connection.isUpperUserLeft) return;
 
-            videoPreview.src = URL.createObjectURL(recorder.blob);
-            videoPreview.play();
-        });
-    }
+//             videoPreview.src = URL.createObjectURL(recorder.blob);
+//             videoPreview.play();
+//         });
+//     }
 
-    if (connection.currentRecorder) {
-        connection.currentRecorder.stopRecording();
-        connection.currentRecorder = null;
-    }
-};
+//     if (connection.currentRecorder) {
+//         connection.currentRecorder.stopRecording();
+//         connection.currentRecorder = null;
+//     }
+// };
 
 var allRecordedBlobs = [];
 
