@@ -1,0 +1,1 @@
+For Auth0 to work you need to create an account, create a client and copy the credentials to .env file.
