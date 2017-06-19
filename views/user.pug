@@ -5,7 +5,7 @@ block primary
     
   div#default-section
     h3 
-      | Hello #{user.displayName}! 
+      //- | Hello #{user.displayName}! 
     //- div.centered-content
     //-   button#presenter-btn.btn.btn-primary Presenter
     //- div.centered-content
@@ -22,8 +22,8 @@ block primary
       div
         video#video-preview(controls='', loop='', width='800', height='600')
     //- hr
-    //- button#btn-start-recording Start Recording
-    button#btn-stop-recording(style='display:none') Stop Recording
+    button#btn-start-recording Start Recording
+    button#btn-stop-recording Stop Recording
     //- hr
     //- div#media-element(style='float:left;')
     //- div(style='float:left; margin-left: 10%;')

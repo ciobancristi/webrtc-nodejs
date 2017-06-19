@@ -23,7 +23,7 @@ connection.socketMessageEvent = 'scalable-media-broadcast-demo';
 
 // user need to connect server, so that others can reach him.
 connection.connectSocket(function (socket) {
-    // socket.on('logs', function (log) {
+     // socket.on('logs', function (log) {
     //     document.querySelector('h1').innerHTML = log.replace(/</g, '----').replace(/>/g, '___').replace(/----/g, '(<span style="color:red;">').replace(/___/g, '</span>)');
     // });
 
@@ -79,17 +79,17 @@ connection.connectSocket(function (socket) {
         // "open" method here will capture media-stream
         // we can skip this function always; it is totally optional here.
         // we can use "connection.getUserMediaHandler" instead
-        connection.open(connection.userid, function () {
-            //showRoomURL(connection.sessionid);
-        });
+        // connection.open(connection.userid, function () {
+        //     //showRoomURL(connection.sessionid);
+        // });
     });
 });
 
 // firefox only
-window.onbeforeunload = function () {
-    // Firefox is ugly.
-    document.getElementById('open-or-join').disabled = false;
-};
+// window.onbeforeunload = function () {
+//     // Firefox is ugly.
+//     document.getElementById('open-or-join').disabled = false;
+// };
 
 // where the replay will run
 var videoPreview = document.getElementById('video-preview');
@@ -156,9 +156,9 @@ connection.onstream = function (event) {
         // Firefox seems UN_ABLE to record remote MediaStream
         // WebAudio solution merely records audio
         // so recording is skipped for Firefox.
-        if (connection.DetectRTC.browser.name === 'Chrome') {
-            repeatedlyRecordStream(event.stream);
-        }
+        // if (connection.DetectRTC.browser.name === 'Chrome') {
+        //     repeatedlyRecordStream(event.stream);
+        // }
     }
 };
 
@@ -166,7 +166,7 @@ connection.onstream = function (event) {
 // if broadcast is available, simply join it. i.e. "join-broadcaster" event should be emitted.
 // if broadcast is absent, simply create it. i.e. "start-broadcasting" event should be fired.
 document.getElementById('open-or-join').onclick = function () {
-    // TODO:  replace with custom userid 
+    // TODO:  replace with custom userid
     var broadcastId = document.getElementById('broadcast-id').value;
     // TODO: change userid validation or delete this
     if (broadcastId.replace(/^\s+|\s+$/g, '').length <= 0) {
@@ -210,19 +210,20 @@ document.getElementById('btn-stop-recording').onclick = function (event) {
     if (!enableRecordings) return;
     //if (event.userid !== videoPreview.userid) return;
 
-    var socket = connection.getSocket();
-    socket.emit('can-not-relay-broadcast');
+    // var socket = connection.getSocket();
+    // socket.emit('can-not-relay-broadcast');
 
     connection.isUpperUserLeft = true;
 
-    if (allRecordedBlobs.length) {
-        // playing lats recorded blob
-        var lastBlob = allRecordedBlobs[allRecordedBlobs.length - 1];
-        videoPreview.src = URL.createObjectURL(lastBlob);
-        videoPreview.play();
-        allRecordedBlobs = [];
-    }
-    else if (connection.currentRecorder) {
+    // if (allRecordedBlobs.length) {
+    //     // playing lats recorded blob
+    //     var lastBlob = allRecordedBlobs[allRecordedBlobs.length - 1];
+    //     videoPreview.src = URL.createObjectURL(lastBlob);
+    //     videoPreview.play();
+    //     allRecordedBlobs = [];
+    // }
+    // else 
+    if (connection.currentRecorder) {
         var recorder = connection.currentRecorder;
         connection.currentRecorder = null;
         recorder.stopRecording(function () {
@@ -230,6 +231,20 @@ document.getElementById('btn-stop-recording').onclick = function (event) {
 
             videoPreview.src = URL.createObjectURL(recorder.blob);
             videoPreview.play();
+
+            var formData = new FormData();
+            formData.append('file', recorder.blob);
+
+            $.ajax({
+                url: '/upload',
+                data: formData,
+                type: 'POST',
+                contentType: false,
+                processData: false,
+            }).done(function (req, res) {
+                req;
+                res;
+            })
         });
     }
 
@@ -247,7 +262,8 @@ function repeatedlyRecordStream(stream) {
     }
 
     connection.currentRecorder = RecordRTC(stream, {
-        type: 'video'
+        type: 'video',
+        mimeType: 'video/webm\;codecs=vp9'
     });
 
     connection.currentRecorder.startRecording();
