@@ -15,14 +15,16 @@ block primary
         label.px-2 
           strong Please choose a room id: 
         input#broadcast-id(type='text', placeholder='broadcast-id', value='room-xyz')
+        
         button#open-or-join.btn-info Open or join room
+
+        button#btn-stop-recording Play last recording
       div#broadcast-viewers-counter
       div
         video#video-preview(controls='', loop='')
         video#video-recording(controls)
-    //- hr
     button#btn-start-recording Start Recording
     button#btn-stop-recording Stop Recording
     button#btn-play-recording Play Recording
-    div
+    
       
