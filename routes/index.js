@@ -11,14 +11,17 @@ var env = {
   AUTH0_CALLBACK_URL: process.env.AUTH0_CALLBACK_URL || 'http://localhost:5000/callback'
 };
 
+var uploadsFolderPath = path.join(__dirname, '../uploads/');
+
 /* GET home page. */
 router.get('/', function (req, res, next) {
+  var a = getAllVideoNames();
   res.render('user');
 });
 
 router.post('/upload', (req, res) => {
   var form = new formidable.IncomingForm();
-  form.uploadDir = path.join(__dirname, '../uploads');
+  form.uploadDir = uploadsFolderPath
   form.keepExtensions = true;
   form.parse(req);
 
@@ -46,8 +49,9 @@ router.post('/upload', (req, res) => {
 });
 
 router.get('/video', function (req, res) {
-  var filename = '2017.6.20-16.27.13.webm'
-  var filePath = path.join(__dirname, '../uploads/' + filename);
+  var fileNames = getAllVideoNames();
+  var filename = fileNames[fileNames.length - 1];
+  var filePath = path.join(uploadsFolderPath, filename);
   var stat = fs.statSync(filePath);
   var total = stat.size;
   if (req.headers['range']) {
@@ -81,6 +85,10 @@ router.get('/video', function (req, res) {
     fs.createReadStream(filePath).pipe(res);
   }
 });
+
+var getAllVideoNames = () => {
+  return fs.readdirSync(uploadsFolderPath);
+}
 
 // router.get('/login',
 //   function (req, res) {

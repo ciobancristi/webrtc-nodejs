@@ -252,8 +252,8 @@ var getTimestampFileName = () => {
         minutes = date.getMinutes(),
         seconds = date.getSeconds();
 
-    return year.toString() + '.' + month.toString() + '.' + day.toString()
-        + '-' + hour.toString() + '.' + minutes.toString() + '.' + seconds.toString();
+    return year.toString() + '_' + month.toString() + '_' + day.toString()
+        + '-' + hour.toString() + '_' + minutes.toString() + '_' + seconds.toString();
 }
 
 // window.onbeforeunload = function () {
