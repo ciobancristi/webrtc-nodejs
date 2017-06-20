@@ -2,15 +2,13 @@ extends dashboard-layout
 
 block primary
   style. 
-    
-  div#default-section
-    h3 
-      //- | Hello #{user.displayName}! 
-    //- div.centered-content
-    //-   button#presenter-btn.btn.btn-primary Presenter
-    //- div.centered-content
-    //-   button#viewer-btn.btn.btn-primary  Viewer
-
+    video {
+      min-height:400px;
+      margin: 10px;
+    }
+    button{
+      margin: 10px;
+    }
   div#video-section   
     section.experiment
       div#inputs
@@ -20,14 +18,11 @@ block primary
         button#open-or-join.btn-info Open or join room
       div#broadcast-viewers-counter
       div
-        video#video-preview(controls='', loop='', width='800', height='600')
+        video#video-preview(controls='', loop='')
+        video#video-recording(controls)
     //- hr
     button#btn-start-recording Start Recording
     button#btn-stop-recording Stop Recording
-    //- hr
-    //- div#media-element(style='float:left;')
-    //- div(style='float:left; margin-left: 10%;')
-    //-   iframe#frame(src='', frameborder='0', height='450', width='500')
-
-  
- 
+    button#btn-play-recording Play Recording
+    div
+      

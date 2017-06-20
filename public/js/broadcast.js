@@ -188,14 +188,18 @@ function addVideoConstrains() {
 // ......................................................
 var btnStartRecording = document.querySelector('#btn-start-recording');
 var btnStopRecording = document.querySelector('#btn-stop-recording');
+var btnPlayRecording = document.querySelector('#btn-play-recording');
+var videoRecording = document.querySelector('#video-recording');
+
 btnStopRecording.disabled = true;
 
 btnStartRecording.onclick = function () {
-    btnStartRecording.disabled = true;
 
-    connection.currentRecorder.startRecording();
-
-    btnStopRecording.disabled = false;
+    if (connection.currentRecorder) {
+        connection.currentRecorder.startRecording();
+        btnStartRecording.disabled = true;
+        btnStopRecording.disabled = false;
+    }
 }
 
 btnStopRecording.onclick = function () {
@@ -204,6 +208,11 @@ btnStopRecording.onclick = function () {
 
     connection.currentRecorder.stopRecording(postFiles);
 };
+
+btnPlayRecording.onclick = () => {
+    videoRecording.src = 'http://localhost:5000/video';
+    videoRecording.play();
+}
 
 function postFiles() {
     var blob = connection.currentRecorder.getBlob();
