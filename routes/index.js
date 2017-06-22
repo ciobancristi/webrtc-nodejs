@@ -14,8 +14,7 @@ var env = {
 };
 
 let log = console.log.bind(console);
-
-var uploadsFolderPath = path.join(__dirname, '../uploads/');
+let uploadsFolderPath = path.join(__dirname, '../uploads/');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -50,71 +49,22 @@ router.post('/upload', (req, res) => {
 
   form.on('end', function () {
     log('-> upload done');
-    uploadFileInAWS(uploadsFolderPath, fileName);
+    s3uploadService.uploadFile(uploadsFolderPath, fileName);
   });
 });
 
-let uploadFileInAWS = (directory, fileName) => {
-  log('started S3 upload')
-  s3uploadService.uploadFile(directory, fileName);
-}
-
-router.get('/video/:id', function (req, res) {
-  var fileId = req.params["id"];
-  var fileName = getFileName(fileId);
-  var filePath = path.join(uploadsFolderPath, fileName);
-  var stat = fs.statSync(filePath);
-  var total = stat.size;
-  if (req.headers['range']) {
-    var range = req.headers.range;
-    var parts = range.replace(/bytes=/, "").split("-");
-    var partialstart = parts[0];
-    var partialend = parts[1];
-
-    var start = parseInt(partialstart, 10);
-    var end = partialend ? parseInt(partialend, 10) : total - 1;
-    var chunksize = (end - start) + 1;
-
-    var maxChunk = 1024 * 1024; // 1MB at a time
-    if (chunksize > maxChunk) {
-      end = start + maxChunk - 1;
-      chunksize = (end - start) + 1;
-    }
-
-    log('RANGE: ' + start + ' - ' + end + ' = ' + chunksize);
-    var file = fs.createReadStream(filePath, { start: start, end: end });
-    res.writeHead(206, {
-      'Content-Range': 'bytes ' + start + '-' + end + '/' + total,
-      'Accept-Ranges': 'bytes',
-      'Content-Length': chunksize,
-      'Content-Type': 'video/webm'
-    });
-    file.pipe(res);
-  } else {
-    log('ALL: ' + total);
-    res.writeHead(200, { 'Content-Length': total, 'Content-Type': 'video/webm' });
-    fs.createReadStream(filePath).pipe(res);
-  }
-});
-
 router.get('/recordings', (req, res) => {
-  var viewModels = getRecordingViewModels(req);
-  res.render('recordings', { videos: viewModels });
+  getRecordingViewModels(req, (viewModels) => {
+    res.render('recordings', { videos: viewModels });
+  });
 })
 
 router.get('/recordings/:id', (req, res) => {
-  var recordingId = req.params["id"];
-  var fileName = getFileName(recordingId);
-  var url = env.S3_BUCKET_URL + fileName;
+  let recordingId = req.params["id"];
+  let fileName = getFileName(recordingId);
+  let url = env.S3_BUCKET_URL + fileName;
   res.render('recording', { url: url })
 })
-
-var getAllVideoNames = () => {
-  var fileNames = fs.readdirSync(uploadsFolderPath);
-  var gitignoreFile = '.gitignore';
-
-  return fileNames.filter(item => item !== gitignoreFile);
-}
 
 var stripFileExtension = (value) => {
   return value.replace('.webm', '');
@@ -124,33 +74,38 @@ var stripSpecialCharacters = (value) => {
   return value.replace(/\.|\-/g, '');
 }
 
-var getRecordingViewModels = (request) => {
-  var videos = getAllVideoNames();
+var getRecordingViewModels = (request, callback) => {
+  s3uploadService.getAllFileNames((videos) => {
+    var viewModels = mapRecordingViewModels(request, videos);
+    return callback(viewModels);
+  })
+}
 
+var mapRecordingViewModels = (request, videos) => {
   return videos.map((value) => {
     var title = stripFileExtension(value);
     var id = stripSpecialCharacters(title)
-    var url = request.protocol + '://' + request.get('host')
-      + request.originalUrl + '/' + id;
+    var url = request.protocol + '://' + request.get('host') +
+      request.originalUrl + '/' + id;
     return {
       title: title,
       id: id,
-      url: url
+      url: url,
+      fileName: value
     };
   })
 }
 
 var getFileName = (fileId) => {
-  var fileNames = getAllVideoNames();
-  var indexOfFile = fileNames.map((value) => {
-    var name = stripFileExtension(value);
-    return stripSpecialCharacters(name);
-  }).indexOf(fileId);
+  let day = fileId.substring(0, 2);
+  let month = fileId.substring(2, 4);
+  let year = fileId.substring(4, 8);
+  let hour = fileId.substring(8, 10);
+  let minutes = fileId.substring(10, 12);
+  let seconds = fileId.substring(12, 14);
 
-  if (indexOfFile !== -1)
-    return fileNames[indexOfFile];
-
-  return null;
+  return day + '.' + month + '.' + year + '-' +
+    hour + '.' + minutes + '.' + seconds + '.webm';
 }
 
 // router.get('/login',

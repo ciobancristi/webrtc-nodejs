@@ -7,7 +7,7 @@ const AWS = require('aws-sdk'),
     fs = require('fs'),
     path = require('path')
 
-const bucket = 'web-rtc-license-video-storage'
+const bucketName = 'web-rtc-license-video-storage';
 
 let log = console.log.bind(console);
 
@@ -17,9 +17,11 @@ s3uploadService.uploadFile = (directory, fileName) => {
     let filePath = path.join(directory, fileName);
     var read = fs.createReadStream(filePath);
     var compress = zlib.createGzip();
+    log(`s3 upload of ${fileName} started`);
     var upload = s3Stream.upload({
-        "Bucket": bucket,
-        "Key": fileName
+        Bucket: bucket,
+        Key: fileName,
+        ACL:'public-read'
     });
 
     upload.on('error', function (error) {
@@ -39,7 +41,7 @@ s3uploadService.uploadFile = (directory, fileName) => {
 }
 
 s3uploadService.getAllFileNames = (callback) => {
-    s3.listObjects({ Bucket: bucket }, (err, data) => {
+    s3.listObjects({ Bucket: bucketName }, (err, data) => {
         var keys = data.Contents.map((val) => {
             return val.Key
         });
