@@ -48,7 +48,7 @@ router.post('/upload', (req, res) => {
   });
 
   form.on('end', function () {
-    log('-> upload done');
+    log('-> disk upload done');
     s3uploadService.uploadFile(uploadsFolderPath, fileName);
   });
 });

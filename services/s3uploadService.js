@@ -14,30 +14,46 @@ let log = console.log.bind(console);
 var s3uploadService = {};
 
 s3uploadService.uploadFile = (directory, fileName) => {
+    // let filePath = path.join(directory, fileName);
+    // var read = fs.createReadStream(filePath);
+    // var compress = zlib.createGzip();
+    // log(`s3 upload of ${fileName} started`);
+    // var upload = s3Stream.upload({
+    //     Bucket: bucket,
+    //     Key: fileName,
+    //     ACL:'public-read'
+    // });
+
+    // upload.on('error', function (error) {
+    //     log('s3 upload error ', error);
+    // });
+
+    // upload.on('part', function (details) {
+    //     log('s3 upload part ', details);
+    // });
+
+    // upload.on('uploaded', function (details) {
+    //     log('s3 uploaded ', details);
+    // });
+
+    // // Pipe the incoming filestream through compression, and up to S3.
+    // read.pipe(compress).pipe(upload);
+
     let filePath = path.join(directory, fileName);
-    var read = fs.createReadStream(filePath);
-    var compress = zlib.createGzip();
     log(`s3 upload of ${fileName} started`);
-    var upload = s3Stream.upload({
-        Bucket: bucket,
-        Key: fileName,
-        ACL:'public-read'
-    });
+    fs.readFile(filePath, function (err, data) {
+        if (err) { throw err; }
 
-    upload.on('error', function (error) {
-        log('s3 upload error ', error);
-    });
+        s3.upload({
+            Bucket: bucketName,
+            Key: fileName,
+            Body: data,
+            ACL: 'public-read'
+        }, function (res) {
+            console.log('s3 successfully uploaded file');
+        })
 
-    upload.on('part', function (details) {
-        log('s3 upload part ', details);
     });
-
-    upload.on('uploaded', function (details) {
-        log('s3 uploaded ', details);
-    });
-
-    // Pipe the incoming filestream through compression, and up to S3.
-    read.pipe(compress).pipe(upload);
 }
 
 s3uploadService.getAllFileNames = (callback) => {
