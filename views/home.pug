@@ -20,9 +20,8 @@ block primary
       div#broadcast-viewers-counter
       div
         video#video-preview(controls='', loop='')
-        video#video-recording(controls)
+        
     button#btn-start-recording Start Recording
-    button#btn-stop-recording Stop Recording
-    button#btn-play-recording Play Recording
-    
-      
+    button#btn-stop-recording Stop Recording 
+block append scripts
+  script(src="/js/broadcast.js")  
