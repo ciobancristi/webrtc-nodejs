@@ -13,9 +13,6 @@ dotenv.load();
 
 var routes = require('./routes/index');
 var user = require('./routes/user');
-const videoUploader = require('./services/videoUploader');
-
-videoUploader.watch();
 
 // This will configure Passport to use Auth0
 // var strategy = new Auth0Strategy({

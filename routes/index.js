@@ -13,6 +13,8 @@ var env = {
   S3_BUCKET_URL: process.env.S3_BUCKET_URL
 };
 
+let log = console.log.bind(console);
+
 var uploadsFolderPath = path.join(__dirname, '../uploads/');
 
 /* GET home page. */
@@ -21,33 +23,41 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/upload', (req, res) => {
-  var form = new formidable.IncomingForm();
-  form.uploadDir = uploadsFolderPath
+  let form = new formidable.IncomingForm();
+  form.uploadDir = uploadsFolderPath;
   form.keepExtensions = true;
   form.parse(req);
+  let fileName = '';
 
   form.on('fileBegin', function (name, file) {
-    file.path = path.join(form.uploadDir, file.name);
+    fileName = file.name;
+    file.path = path.join(form.uploadDir, file.name);;
   });
 
   form.on('file', function (name, file) {
-    console.log('Uploaded ' + file.name);
+    log('Uploaded ' + file.name);
   });
 
   form.on('error', function (err) {
-    console.log("an error has occured with form upload");
-    console.log(err);
+    log("an error has occured with form upload");
+    log(err);
     //request.resume();
   });
 
   form.on('aborted', function (err) {
-    console.log("user aborted upload");
+    log("user aborted upload");
   });
 
   form.on('end', function () {
-    console.log('-> upload done');
+    log('-> upload done');
+    uploadFileInAWS(uploadsFolderPath, fileName);
   });
 });
+
+let uploadFileInAWS = (directory, fileName) => {
+  log('started S3 upload')
+  s3uploadService.uploadFile(directory, fileName);
+}
 
 router.get('/video/:id', function (req, res) {
   var fileId = req.params["id"];
@@ -71,7 +81,7 @@ router.get('/video/:id', function (req, res) {
       chunksize = (end - start) + 1;
     }
 
-    console.log('RANGE: ' + start + ' - ' + end + ' = ' + chunksize);
+    log('RANGE: ' + start + ' - ' + end + ' = ' + chunksize);
     var file = fs.createReadStream(filePath, { start: start, end: end });
     res.writeHead(206, {
       'Content-Range': 'bytes ' + start + '-' + end + '/' + total,
@@ -81,7 +91,7 @@ router.get('/video/:id', function (req, res) {
     });
     file.pipe(res);
   } else {
-    console.log('ALL: ' + total);
+    log('ALL: ' + total);
     res.writeHead(200, { 'Content-Length': total, 'Content-Type': 'video/webm' });
     fs.createReadStream(filePath).pipe(res);
   }

@@ -9,9 +9,11 @@ const AWS = require('aws-sdk'),
 
 const bucket = 'web-rtc-license-video-storage'
 
+let log = console.log.bind(console);
+
 var s3uploadService = {};
 
-s3uploadService.uploadFile = (directory, fileName, callback) => {
+s3uploadService.uploadFile = (directory, fileName) => {
     let filePath = path.join(directory, fileName);
     var read = fs.createReadStream(filePath);
     var compress = zlib.createGzip();
@@ -21,27 +23,28 @@ s3uploadService.uploadFile = (directory, fileName, callback) => {
     });
 
     upload.on('error', function (error) {
-        console.log('s3 upload error ', error);
+        log('s3 upload error ', error);
     });
 
     upload.on('part', function (details) {
-        console.log('s3 upload part ', details);
+        log('s3 upload part ', details);
     });
 
     upload.on('uploaded', function (details) {
-        console.log('s3 uploaded ', details);
+        log('s3 uploaded ', details);
     });
 
     // Pipe the incoming filestream through compression, and up to S3.
     read.pipe(compress).pipe(upload);
-
-    return callback;
 }
 
-s3uploadService.getAllFileNames = () => {
+s3uploadService.getAllFileNames = (callback) => {
     s3.listObjects({ Bucket: bucket }, (err, data) => {
-        var keys = data.Contents.map((val) => { return val.Key });
-        return keys;
+        var keys = data.Contents.map((val) => {
+            return val.Key
+        });
+
+        return callback(keys);
     });
 }
 
