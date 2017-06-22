@@ -3,7 +3,7 @@ extends layout
 block content 
     div
         header.app-header.navbar
-            a.navbar-brand(href="#") 
+            a.navbar-brand(href="/") 
                 |   Video conference app
             ul.nav.navbar-nav.ml-auto
                 li.nav-item.dropdown
@@ -21,9 +21,13 @@ block content
             nav.sidebar-nav
                 ul.nav
                     li.nav-item
-                        //- a.nav-link(href='#')
-                        //-     i.icon-speedometer
-                        //-     |   Dashboard
+                        a.nav-link(href='/')
+                            i.icon-speedometer
+                            |   Dashboard
+                    li.nav-item
+                        a.nav-link(href='/recordings')
+                            i.icon-speedometer
+                            |   Recordings
         main.main
             div.container-fluid
                 block primary

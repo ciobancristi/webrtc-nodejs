@@ -1,0 +1,19 @@
+extends dashboard-layout
+
+block primary
+    link(rel='stylesheet', href='/css/recordings.css')
+    section.video-gallery
+        header
+            h2 Recordings
+        hr
+        if videos && videos.length > 0
+            each video in videos
+                article.video
+                    figure
+                        a.video-img(href=video.url)
+                            img(src='/img/video-preview.png')
+                        h4.subtitle.text-center= video.title
+                        
+        else 
+            article 
+                h3 There are no recordings.

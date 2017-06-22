@@ -9,10 +9,6 @@ connection.enableScalableBroadcast = true;
 connection.maxRelayLimitPerUser = 1;
 connection.autoCloseEntireSession = true;
 connection.socketURL = '/';
-// TODO: see if it is relevant
-connection.socketMessageEvent = 'scalable-media-broadcast-demo';
-
-
 
 connection.connectSocket(function (socket) {
     socket.on('logs', function (msg) { console.log('socket msg: ' + msg) })
@@ -69,17 +65,17 @@ connection.connectSocket(function (socket) {
 });
 
 // where the replay will run
-var videoPreview = document.getElementById('video-preview');
+var videoPreview = $('#video-preview').get(0);
 
 connection.onstream = function (event) {
     if (connection.isInitiator && event.type !== 'local') {
         return;
     }
-    // TODO: see if it is relevant
-    if (event.mediaElement) {
-        event.mediaElement.pause();
-        delete event.mediaElement;
-    }
+    // // TODO: see if it is relevant
+    // if (event.mediaElement) {
+    //     event.mediaElement.pause();
+    //     delete event.mediaElement;
+    // }
 
     connection.isUpperUserLeft = false;
     videoPreview.src = URL.createObjectURL(event.stream);
@@ -188,8 +184,6 @@ function addVideoConstrains() {
 // ......................................................
 var btnStartRecording = document.querySelector('#btn-start-recording');
 var btnStopRecording = document.querySelector('#btn-stop-recording');
-var btnPlayRecording = document.querySelector('#btn-play-recording');
-var videoRecording = document.querySelector('#video-recording');
 
 btnStopRecording.disabled = true;
 
@@ -208,11 +202,6 @@ btnStopRecording.onclick = function () {
 
     connection.currentRecorder.stopRecording(postFiles);
 };
-
-btnPlayRecording.onclick = () => {
-    videoRecording.src = 'http://localhost:5000/video';
-    videoRecording.play();
-}
 
 function postFiles() {
     var blob = connection.currentRecorder.getBlob();
@@ -252,8 +241,13 @@ var getTimestampFileName = () => {
         minutes = date.getMinutes(),
         seconds = date.getSeconds();
 
-    return year.toString() + '_' + month.toString() + '_' + day.toString()
-        + '-' + hour.toString() + '_' + minutes.toString() + '_' + seconds.toString();
+    return toTwoDigits(day) + '.' + toTwoDigits(month) + '.' + year.toString()
+        + '-' + toTwoDigits(hour) + '.' + toTwoDigits(minutes) + '.' + toTwoDigits(seconds);
+}
+
+var toTwoDigits = (value) => {
+    if (value < 10) value = '0' + value.toString();
+    return value.toString();
 }
 
 // window.onbeforeunload = function () {

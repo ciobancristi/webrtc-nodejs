@@ -4,19 +4,20 @@ var router = express.Router();
 var formidable = require('formidable');
 var path = require('path');
 var fs = require('fs');
+const s3uploadService = require('./../services/s3uploadService');
 
 var env = {
   AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
   AUTH0_DOMAIN: process.env.AUTH0_DOMAIN,
-  AUTH0_CALLBACK_URL: process.env.AUTH0_CALLBACK_URL || 'http://localhost:5000/callback'
+  AUTH0_CALLBACK_URL: process.env.AUTH0_CALLBACK_URL || 'http://localhost:5000/callback',
+  S3_BUCKET_URL: process.env.S3_BUCKET_URL
 };
 
 var uploadsFolderPath = path.join(__dirname, '../uploads/');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-  var a = getAllVideoNames();
-  res.render('user');
+  res.render('home');
 });
 
 router.post('/upload', (req, res) => {
@@ -48,10 +49,10 @@ router.post('/upload', (req, res) => {
   });
 });
 
-router.get('/video', function (req, res) {
-  var fileNames = getAllVideoNames();
-  var filename = fileNames[fileNames.length - 1];
-  var filePath = path.join(uploadsFolderPath, filename);
+router.get('/video/:id', function (req, res) {
+  var fileId = req.params["id"];
+  var fileName = getFileName(fileId);
+  var filePath = path.join(uploadsFolderPath, fileName);
   var stat = fs.statSync(filePath);
   var total = stat.size;
   if (req.headers['range']) {
@@ -86,8 +87,60 @@ router.get('/video', function (req, res) {
   }
 });
 
+router.get('/recordings', (req, res) => {
+  var viewModels = getRecordingViewModels(req);
+  res.render('recordings', { videos: viewModels });
+})
+
+router.get('/recordings/:id', (req, res) => {
+  var recordingId = req.params["id"];
+  var fileName = getFileName(recordingId);
+  var url = env.S3_BUCKET_URL + fileName;
+  res.render('recording', { url: url })
+})
+
 var getAllVideoNames = () => {
-  return fs.readdirSync(uploadsFolderPath);
+  var fileNames = fs.readdirSync(uploadsFolderPath);
+  var gitignoreFile = '.gitignore';
+
+  return fileNames.filter(item => item !== gitignoreFile);
+}
+
+var stripFileExtension = (value) => {
+  return value.replace('.webm', '');
+}
+
+var stripSpecialCharacters = (value) => {
+  return value.replace(/\.|\-/g, '');
+}
+
+var getRecordingViewModels = (request) => {
+  var videos = getAllVideoNames();
+
+  return videos.map((value) => {
+    var title = stripFileExtension(value);
+    var id = stripSpecialCharacters(title)
+    var url = request.protocol + '://' + request.get('host')
+      + request.originalUrl + '/' + id;
+    return {
+      title: title,
+      id: id,
+      url: url
+    };
+  })
+}
+
+var getFileName = (fileId) => {
+  var fileNames = getAllVideoNames();
+  var indexOfFile = fileNames.map((value) => {
+    var name = stripFileExtension(value);
+    return stripSpecialCharacters(name);
+  }).indexOf(fileId);
+
+  if (indexOfFile !== -1)
+    return fileNames[indexOfFile];
+
+  return null;
 }
 
 // router.get('/login',

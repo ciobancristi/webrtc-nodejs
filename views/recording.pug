@@ -1,0 +1,11 @@
+extends dashboard-layout
+
+block primary
+    style. 
+        video {
+            min-height:400px;
+            margin: 10px;
+        }
+    h2 Recording 
+        i.icon-speedometer
+    video#video-recording(controls, src='https://s3.amazonaws.com/web-rtc-license-video-storage/21.06.2017-19.07.41.webm')
