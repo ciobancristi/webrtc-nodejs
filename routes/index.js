@@ -34,7 +34,7 @@ router.post('/upload', (req, res) => {
   });
 
   form.on('file', function (name, file) {
-    log('Uploaded ' + file.name);
+    log(`Uploaded ${file.name} to disk`);
   });
 
   form.on('error', function (err) {
