@@ -14,12 +14,14 @@ html
     
     script(src="/js/jquery.min.js")
     
-    script(src="/js/RTCMultiConnection.js")
+    script(src="/js/rtc/RTCMultiConnection.js")
     script(src="https://rtcmulticonnection.herokuapp.com/socket.io/socket.io.js")
-    script(src="/js/RecordRTC.min.js")
+    script(src="/js/rtc/RecordRTC.min.js")
   
   body.app.header-fixed.sidebar-fixed.aside-menu-fixed.aside-menu-hidden
     block content
     block scripts
       script(src="/js/script.js")
-      script(src="/js/bootstrap.min.js")
+      //script(src="/js/ui/bootstrap.min.js")
+      script(src="/js/ui/core-ui.js")
+      script(src="/js/EventEmitter-4.0.3.min.js")
