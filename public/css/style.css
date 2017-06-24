@@ -9,17 +9,47 @@
     margin: 0 10px;
 }
 
-#broadcast-id{
+#broadcast-id {
     margin-right: 20px;
 }
 
-#inputs{
+#inputs {
     margin: 20px;
 }
 
-.experiment{
+.experiment {
     margin-top: 40px;
 }
+
+#video-preview {
+    min-height: 400px;
+    margin: 10px;
+}
+
+.btn-recording {
+    margin: 10px;
+}
+
+#canvas {
+    position: absolute;
+    opacity: 1;
+    top: 200;
+    left: 238;
+    width: 640px;
+    height: 480px;
+    display: none
+}
+
+#movement {
+    position: absolute;
+    top: 200;
+    left: 238;
+    border: 1px solid red;
+    background: rgba(255, 0, 0, 0.3);
+    display: none;
+}
+
+
 /*.form-signin {
             margin-top: 150px;
             max-width: 330px;

@@ -50,7 +50,7 @@ s3uploadService.uploadFile = (directory, fileName) => {
             Body: data,
             ACL: 'public-read'
         }, function (res) {
-            console.log('s3 successfully uploaded file');
+            console.log(`s3 successfully uploaded file ${fileName}`);
         })
 
     });

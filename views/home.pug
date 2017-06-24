@@ -1,15 +1,7 @@
 extends dashboard-layout
 
 block primary
-  style. 
-    video {
-      min-height:400px;
-      margin: 10px;
-    }
-    button{
-      margin: 10px;
-    }
-  div#video-section   
+  div#video-section  
     section.experiment
       div#inputs
         label.px-2 
@@ -21,7 +13,17 @@ block primary
       div
         video#video-preview(controls='', loop='')
         
-    button#btn-start-recording Start Recording
-    button#btn-stop-recording Stop Recording 
+    button#btn-start-recording.btn-recording Start Recording
+    button#btn-stop-recording.btn-recording Stop Recording 
+
+    div#canvas
+    div#movement
+    
 block append scripts
-  script(src="/js/broadcast.js")  
+  script.
+    MotionDetector = {};
+  script(src="/js/motionDetector/WebCamCapture.js")
+  script(src="/js/motionDetector/ImageCompare.js")
+  script(src="/js/motionDetector/Core.js")
+
+  script(src="/js/rtc/broadcast.js")
