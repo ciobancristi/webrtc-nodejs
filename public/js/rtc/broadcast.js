@@ -73,10 +73,10 @@
             return;
         }
         // // TODO: see if it is relevant
-        // if (event.mediaElement) {
-        //     event.mediaElement.pause();
-        //     delete event.mediaElement;
-        // }
+        if (event.mediaElement) {
+            event.mediaElement.pause();
+            delete event.mediaElement;
+        }
 
         connection.isUpperUserLeft = false;
         videoPreview.src = URL.createObjectURL(event.stream);
