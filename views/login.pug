@@ -3,35 +3,34 @@ extends layout
 block content
   div(id="root" style="width: 280px; margin: 40px auto; padding: 10px;")
 
-  script.
-    // Construct an instance of Auth0Lock with your clientId and aut0 domain name
-    var lock = new Auth0Lock('#{env.AUTH0_CLIENT_ID}', '#{env.AUTH0_DOMAIN}',{ auth: {
-          redirectUrl: '#{env.AUTH0_CALLBACK_URL}'
-        , responseType: 'code'
-        , params: {
-          scope: 'openid name email picture'
-        }
-      }});
+    form.form-signin(method='POST', action='/login')
 
-    // Show lock's login widget
-    lock.show();
+      h2.form-signin-heading.text-center Sign in
+      .form-group
+        label.sr-only(for='username') Username
+        input.form-control(type='text', id='username', placeholder='Username', name='username', required='', autofocus='')
+      .form-group
+        label.sr-only(for='password') Password
+        input.form-control(type='password', id='password', placeholder='Password', name='password', required='')
+      if(message)
+        .alert.alert-danger(role='alert')
+          span.glyphicon.glyphicon-exclamation-sign(aria-hidden='true')
+          span.sr-only Error:
+          =message
+      button.btn.btn-lg.btn-primary.btn-block(type='submit') Sign in
 
-
-  //- form.form-signin(action='javascript:signinDb();')
-
-  //-   h2.form-signin-heading.text-center Sign in
-
-  //-   label.sr-only(for='userName') Email address
-
-  //-   input.form-control(type='email', id='username', placeholder='User', name='userName', required='', autofocus='')
-
-  //-   label.sr-only(for='password') Password
-
-  //-   input.form-control(type='password', id='password', placeholder='Password', name='password', required='')
-     
-  //-   button.btn.btn-lg.btn-primary.btn-block(type='submit') Sign in
-  //-   br
-  //- button.btn.btn-lg.btn-primary.btn-block(onclick="signinGoogle()") Log In with Google
-
-  //- script(src="/js/login.js")
-  
+    //- h1 Login Page
+    //- p.lead Say something worthwhile here.
+    //- br
+    //- form(role='form', action="/login",method="post", style='max-width: 300px;')
+    //-   .form-group
+    //-       input.form-control(type='text', name="email", placeholder='Enter E')
+    //-   .form-group
+    //-     input.form-control(type='password', name="password", placeholder='Password')
+    //-   .form-group
+    //-   if(message)
+    //-     .alert.alert-danger(role='alert')
+    //-       span.glyphicon.glyphicon-exclamation-sign(aria-hidden='true')
+    //-       span.sr-only Error:
+    //-       =message
+    //-   button.btn.btn-primary(type='submit') Submit  
