@@ -9,12 +9,11 @@ const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn('/login');
 let log = console.log.bind(console);
 let uploadsFolderPath = path.join(__dirname, '../uploads/');
 
-/* GET home page. */
 router.get('/', ensureLoggedIn, (req, res, next) => {
   res.render('home', { userName: req.user.name });
 });
 
-router.post('/upload', (req, res) => {
+router.post('/upload', ensureLoggedIn, (req, res) => {
   let form = new formidable.IncomingForm();
   form.uploadDir = uploadsFolderPath;
   form.keepExtensions = true;
@@ -45,21 +44,5 @@ router.post('/upload', (req, res) => {
     s3uploadService.uploadFile(uploadsFolderPath, fileName);
   });
 });
-
-// router.get('/login',
-//    (req, res) {
-//     res.render('login', { env: env });
-//   });
-
-// router.get('/logout',  (req, res) {
-//   req.logout();
-//   res.redirect('/');
-// });
-
-// router.get('/callback',
-//   passport.authenticate('auth0', { failureRedirect: '/url-if-something-fails' }),
-//    (req, res) {
-//     res.redirect(req.session.returnTo || '/user');
-//   });
 
 module.exports = router;
