@@ -9,9 +9,13 @@ block primary
                     input.form-control(type='text', name="fullName", placeholder='Enter full name', value=user.name, required)
                 .form-group
                     label(for='securityCoEmail') Security company email
-                    input.form-control(type='email', name="securityCoEmail",aria-describedby="securityCompanyEmailHelp", placeholder='Enter security company email', value=user.securityCoEmail, required)
+                    input.form-control(type='email', name="securityCoEmail", aria-describedby="securityCompanyEmailHelp", placeholder='Enter security company email', value=user.securityCoEmail, required)
                     small#securityCompanyEmailHelp.form-text Necessary to set up for the red button to work.
-                
+                .form-group
+                    label(for='emailTemplate') Email Template
+                    textarea.form-control(rows="6", name="emailTemplate", aria-describedby="emailTemplateHelp", placeholder='Enter email template', value=user.emailTemplate)
+                    small#securityCompanyEmailHelp.form-text Custom HTML email template to be sent to the security company. [Optional]
+
                 button.btn.btn-primary(type='submit') Submit
                 
                 div#user-details-alert.alert.alert-success(role='alert')

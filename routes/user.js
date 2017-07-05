@@ -1,17 +1,11 @@
+'use strict';
+
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn();
-const mongoose = require('mongoose');
 const User = require('../models/user');
 const emailService = require('../services/emailService');
-
-var env = {
-  S3_BUCKET_URL: process.env.S3_BUCKET_URL,
-  MONGODB: process.env.MONGODB
-};
-
-const db = mongoose.connect(env.MONGODB, { useMongoClient: true });
 
 router.get('/register', (req, res) => {
   res.render('register', {});
@@ -78,7 +72,8 @@ router.post('/user-details', ensureLoggedIn, (req, res) => {
   let setObject = {
     $set: {
       name: req.body.fullName,
-      securityCoEmail: req.body.securityCoEmail
+      securityCoEmail: req.body.securityCoEmail,
+      emailTemplate: req.body.emailTemplate
     }
   }
   User.findByIdAndUpdate(req.user.id, setObject, { new: true }, function (err, user) {
@@ -86,6 +81,8 @@ router.post('/user-details', ensureLoggedIn, (req, res) => {
 
     req.session.passport.user.fullName = user.name;
     req.session.passport.user.securityCoEmail = user.securityCoEmail;
+    req.session.passport.user.emailTemplate = user.emailTemplate;
+
     res.send({ success: true });
   })
 });
@@ -93,12 +90,13 @@ router.post('/user-details', ensureLoggedIn, (req, res) => {
 router.post('/user/alert-security', ensureLoggedIn, (req, res) => {
   let securityCoEmail = req.user.securityCoEmail;
   let userName = req.user.name;
+  let emailTemplate = req.user.emailTemplate;
 
   if (!securityCoEmail)
     res.send({ success: false, message: "Please set your security company email!" });
 
   // TODO: uncomment this when go live
-  //var response = emailService.sendMail(securityCoEmail, userName);
+  //var response = emailService.sendMail(securityCoEmail, userName, emailTemplate);
 
   // testing purposes
   var response = { success: Math.random() > 0.5, message: "ERRRRROOORRR" };

@@ -14,7 +14,7 @@ let transporter = nodemailer.createTransport({
 
 let prepareEmail = (to, clientName) => {
     let emailTemplate = {
-        from: '"Home Security System" <flost18@gmail.com>',
+        from: '"Home Security System" ' + process.env.SMTP_EMAIL,
         subject: 'Security breach',
         to: to,
         html: '<p> Client <strong>' + clientName +
@@ -26,8 +26,13 @@ let prepareEmail = (to, clientName) => {
 
 var emailService = {};
 
-emailService.sendMail = (to, clientName) => {
-    let emailTemplate = prepareEmail(to, clientName);
+emailService.sendMail = (to, clientName, userEmailTemplate) => {
+    let emailTemplate;
+    if (userEmailTemplate) {
+        emailTemplate = userEmailTemplate;
+    } else {
+        emailTemplate = prepareEmail(to, clientName);
+    }
 
     if (!emailTemplate.to || !emailTemplate.html) {
         return { success: false, message: "Missing destination email or body" };

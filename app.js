@@ -9,22 +9,16 @@ var dotenv = require('dotenv');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');
-var flash = require('connect-flash');
 
 dotenv.load();
 
-var routes = require('./routes/index');
-var user = require('./routes/user');
-var recordings = require('./routes/recordings');
-
 var app = express();
 
-// view engine setup
+///////////////// View engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+///////////////// Config
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -34,8 +28,8 @@ app.use(session({
   resave: true,
   saveUninitialized: true
 }));
-app.use(flash());
 
+///////////////// Passport
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -44,13 +38,26 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+///////////////// Mongoose
+
 mongoose.connect(process.env.MONGODB)
 
+// uncomment after placing your favicon in /public
+//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
-app.use('/', user);
-app.use('/recordings', recordings);
+///////////////// Routes
+
+var homeRoute = require('./routes/home');
+var userRoute = require('./routes/user');
+var recordingsRoute = require('./routes/recordings');
+var uploadRoute = require('./routes/upload');
+
+app.use('/', homeRoute);
+app.use('/', userRoute);
+app.use('/recordings', recordingsRoute);
+app.use('/upload', uploadRoute);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -59,7 +66,7 @@ app.use(function (req, res, next) {
   next(err);
 });
 
-// error handlers
+///////////////// Error handlers
 
 // development error handler
 // will print stacktrace

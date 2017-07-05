@@ -1,5 +1,6 @@
+'use strict';
+
 const express = require('express');
-const passport = require('passport');
 const router = express.Router();
 const formidable = require('formidable');
 const path = require('path');
@@ -9,11 +10,7 @@ const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn('/login');
 let log = console.log.bind(console);
 let uploadsFolderPath = path.join(__dirname, '../uploads/');
 
-router.get('/', ensureLoggedIn, (req, res, next) => {
-  res.render('home', { userName: req.user.name });
-});
-
-router.post('/upload', ensureLoggedIn, (req, res) => {
+router.post('/', ensureLoggedIn, (req, res) => {
   let form = new formidable.IncomingForm();
   form.uploadDir = uploadsFolderPath;
   form.keepExtensions = true;
