@@ -59,7 +59,7 @@
                 OfferToReceiveAudio: false
             };
             connection.session = typeOfStreams;
-            // vital line of code!!!
+
             connection.open(connection.userid);
         });
 
@@ -109,9 +109,13 @@
         connection.currentRecorder = RecordRTC(event.stream, options);
     };
 
-    document.getElementById('open-or-join').onclick = function () {
+    // document.getElementById('open-or-join').onclick = function () {
+    //     startBroadcast();
+    // };
+
+    var startBroadcast = () => {
         // TODO:  replace with custom userid
-        var broadcastId = document.getElementById('broadcast-id').value;
+        let broadcastId = document.getElementById('broadcast-id').value;
 
         if (broadcastId.replace(/^\s+|\s+$/g, '').length <= 0) {
             alert('Please enter broadcast-id');
@@ -119,7 +123,7 @@
             return;
         }
         // TODO: remove this
-        document.getElementById('open-or-join').disabled = true;
+        //document.getElementById('open-or-join').disabled = true;
 
         connection.session = {
             audio: true,
@@ -127,7 +131,7 @@
             oneway: true
         };
 
-        addVideoConstrains();
+        //addVideoConstrains();
 
         var socket = connection.getSocket();
 
@@ -144,10 +148,10 @@
                 typeOfStreams: connection.session
             });
         });
-    };
-    // setTimeout(() => {
-    //     document.getElementById('open-or-join').click();
-    // }, 2000);
+    }
+    setTimeout(() => {
+        startBroadcast();
+    }, 1100);
 
     connection.onNumberOfBroadcastViewersUpdated = function (event) {
         if (!connection.isInitiator) return;

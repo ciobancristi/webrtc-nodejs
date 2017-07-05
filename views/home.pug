@@ -3,18 +3,25 @@ extends dashboard-layout
 block primary
   div#video-section  
     section.experiment
-      div#inputs
-        label.px-2 
-          strong Please choose a room id: 
-        input#broadcast-id(type='text', placeholder='broadcast-id', value='room-xyz')
+      //- div#inputs
+      //-   label.px-2 
+      //-     strong Please choose a room id: 
+      input#broadcast-id(type='text', placeholder='broadcast-id', value='room-xyz', style='display:none;')
         
-        button#open-or-join.btn-info Open or join room
+        //- button#open-or-join.btn-info Open or join room
+      
       div#broadcast-viewers-counter
       div
         video#video-preview(controls='', loop='')
-        
-    button#btn-start-recording.btn-recording Start Recording
-    button#btn-stop-recording.btn-recording Stop Recording 
+    div    
+      button#btn-start-recording.btn-recording Start Recording
+      button#btn-stop-recording.btn-recording Stop Recording 
+    //- div 
+    //-   label Motion Detection:  
+    //-   label.switch.switch-3d.switch-secondary
+    //-     input.switch-input(type='checkbox', checked='')
+    //-     span.switch-label
+    //-     span.switch-handle
 
     div#canvas
     div#movement
@@ -22,8 +29,8 @@ block primary
 block append scripts
   script.
     MotionDetector = {};
+
   script(src="/js/motionDetector/WebCamCapture.js")
   script(src="/js/motionDetector/ImageCompare.js")
   script(src="/js/motionDetector/Core.js")
-
   script(src="/js/rtc/broadcast.js")
