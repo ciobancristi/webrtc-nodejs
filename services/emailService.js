@@ -7,30 +7,39 @@ let transporter = nodemailer.createTransport({
     port: 465,
     secure: true, // secure:true for port 465, secure:false for port 587
     auth: {
-        user: 'flost18@gmail.com',
-        pass: '!AM1Parola'
+        user: process.env.SMTP_EMAIL,
+        pass: process.env.SMTP_PASSWORD
     }
 });
 
-// setup email data with unicode symbols
-let mailOptions = {
-    from: '"Home Security System" <flost18@gmail.com>', // sender address
-    to: 'ciobancristi@gmail.com', // list of receivers
-    subject: 'Hello ✔', // Subject line
-    text: 'Hello world ?', // plain text body
-    html: '<b>Hello world ?</b>' // html body
-};
-
-// send mail with defined transport object
+let prepareEmail = (to, clientName) => {
+    let emailTemplate = {
+        from: '"Home Security System" <flost18@gmail.com>',
+        subject: 'Security breach',
+        to: to,
+        html: '<p> Client <strong>' + clientName +
+        "</strong> encountered a security issue.</p>" +
+        "<br/>Please provide assistance!"
+    };
+    return emailTemplate;
+}
 
 var emailService = {};
 
-emailService.sendMail = () => {
-    transporter.sendMail(mailOptions, (error, info) => {
+emailService.sendMail = (to, clientName) => {
+    let emailTemplate = prepareEmail(to, clientName);
+
+    if (!emailTemplate.to || !emailTemplate.html) {
+        return { success: false, message: "Missing destination email or body" };
+    }
+
+    transporter.sendMail(emailTemplate, (error, info) => {
         if (error) {
-            return console.log(error);
+            console.log(error);
+            return { success: false, message: error };
         }
         console.log('Email %s sent: %s', info.messageId, info.response);
+        return { success: true };
     });
 }
 

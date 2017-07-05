@@ -1,0 +1,20 @@
+extends dashboard-layout
+
+block primary
+    .container
+        .row
+            form#user-details-form.col(method='POST', action='/user-details')
+                .form-group
+                    label(for='fullName') Full Name
+                    input.form-control(type='text', name="fullName", placeholder='Enter full name', value=user.name, required)
+                .form-group
+                    label(for='securityCoEmail') Security company email
+                    input.form-control(type='email', name="securityCoEmail",aria-describedby="securityCompanyEmailHelp", placeholder='Enter security company email', value=user.securityCoEmail, required)
+                    small#securityCompanyEmailHelp.form-text Necessary to set up for the red button to work.
+                
+                button.btn.btn-primary(type='submit') Submit
+                
+                div#user-details-alert.alert.alert-success(role='alert')
+                    strong Success! Your changes have been successfully saved.
+                
+            .col

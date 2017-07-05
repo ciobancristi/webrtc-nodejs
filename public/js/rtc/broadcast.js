@@ -79,6 +79,7 @@
         }
 
         connection.isUpperUserLeft = false;
+        videoPreview.style.visibility = "visible";
         videoPreview.src = URL.createObjectURL(event.stream);
         videoPreview.play();
 
@@ -192,6 +193,7 @@
     // ......................................................
     var btnStartRecording = document.querySelector('#btn-start-recording');
     var btnStopRecording = document.querySelector('#btn-stop-recording');
+    var recordingState = document.getElementById('recording-state');
     btnStopRecording.disabled = true;
 
     var manualRecording = false;
@@ -210,8 +212,9 @@
 
             btnStopRecording.disabled = false;
             btnStartRecording.disabled = true;
-
             manualRecording = true;
+
+            recordingState.innerHTML = 'Recording';
             connection.currentRecorder.startRecording();
 
             var duration = 3 * 1000 * 60; // three minutes
@@ -238,6 +241,8 @@
         if (connection.currentRecorder && !manualRecording && !isRecording) {
             console.log('started recording');
             isRecording = true;
+
+            recordingState.innerHTML = 'Recording';
             connection.currentRecorder.startRecording();
             var duration = 1000 * 30; // thirty seconds
             recording = setTimeout(() => { stopRecording() }, duration);
@@ -246,6 +251,7 @@
 
     var stopRecording = () => {
         isRecording = false;
+        recordingState.innerHTML = 'Pending';
         connection.currentRecorder.stopRecording(postFiles);
         console.log('stopped recording')
     }

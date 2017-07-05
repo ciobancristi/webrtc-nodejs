@@ -3,26 +3,27 @@ extends dashboard-layout
 block primary
   div#video-section  
     section.experiment
-      //- div#inputs
-      //-   label.px-2 
-      //-     strong Please choose a room id: 
       input#broadcast-id(type='text', placeholder='broadcast-id', value='room-xyz', style='display:none;')
-        
-        //- button#open-or-join.btn-info Open or join room
-      
+
       div#broadcast-viewers-counter
       div
-        video#video-preview(controls='', loop='')
-    div    
-      button#btn-start-recording.btn-recording Start Recording
-      button#btn-stop-recording.btn-recording Stop Recording 
+        video#video-preview(controls='', loop='', style="visibility:hidden;")
+      div.margin-10
+        | Recording state: 
+        strong#recording-state Pending   
+      div
+        button#btn-start-recording.margin-10 Start Recording
+        button#btn-stop-recording.margin-10 Stop Recording 
+      div  
+        button#contect-security-btn.margin-10.btn.btn-danger.btn-lg(type='button') Contact Security
+      
     //- div 
     //-   label Motion Detection:  
     //-   label.switch.switch-3d.switch-secondary
     //-     input.switch-input(type='checkbox', checked='')
     //-     span.switch-label
     //-     span.switch-handle
-
+      
     div#canvas
     div#movement
     

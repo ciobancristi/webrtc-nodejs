@@ -3,8 +3,11 @@ extends layout
 block content 
     div
         header.app-header.navbar
-            a.navbar-brand(href="/") 
+            a.navbar-brand(href="/", style="padding-top: 10px;") 
                 |   Smart Security System
+            ul.nav.navbar-nav.d-md-down-none(style="margin-left: 55px;")
+                li.nav-item
+                    a.nav-link.navbar-toggler.sidebar-toggler(href='#') ☰
             ul.nav.navbar-nav.ml-auto
                 li.nav-item.dropdown
                     a.nav-link.dropdown-toggle.nav-link(data-toggle='dropdown', href='#', role='button', aria-haspopup='true', aria-expanded='false')
@@ -12,6 +15,9 @@ block content
                     div.dropdown-menu.dropdown-menu-right
                         div.dropdown-header.text-center
                             strong Account
+                        a.dropdown-item(href='/user-details')
+                            i.fa.fa-user
+                            |  User Info
                         a.dropdown-item(href='/logout')
                             i.fa.fa-lock
                             |  Logout
@@ -22,7 +28,7 @@ block content
                     li.nav-item
                         a.nav-link(href='/')
                             i.icon-speedometer
-                            |   Dashboard
+                            |   Home
                     li.nav-item
                         a.nav-link(href='/recordings')
                             i.icon-speedometer

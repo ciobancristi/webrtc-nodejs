@@ -4,6 +4,7 @@ const passport = require('passport');
 const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn();
 const mongoose = require('mongoose');
 const User = require('../models/user');
+const emailService = require('../services/emailService');
 
 var env = {
   S3_BUCKET_URL: process.env.S3_BUCKET_URL,
@@ -41,15 +42,6 @@ router.post('/register', (req, res) => {
   });
 });
 
-router.get('/ping', (req, res) => {
-  User.find((err, users) => {
-    if (err)
-      console.log(err);
-    res.json(users);
-  });
-
-})
-
 router.get('/login', (req, res) => {
   res.render('login', { user: req.user });
 });
@@ -75,6 +67,47 @@ router.post('/login', function (req, res, next) {
 router.get('/logout', (req, res) => {
   req.logout();
   res.redirect('/');
+});
+
+router.get('/user-details', ensureLoggedIn, (req, res) => {
+  res.render('user-details', { user: req.user, userName: req.user.name });
+});
+
+router.post('/user-details', ensureLoggedIn, (req, res) => {
+  let user = req.body.user;
+  let setObject = {
+    $set: {
+      name: req.body.fullName,
+      securityCoEmail: req.body.securityCoEmail
+    }
+  }
+  User.findByIdAndUpdate(req.user.id, setObject, { new: true }, function (err, user) {
+    if (err) return console.log(err);
+
+    req.session.passport.user.fullName = user.name;
+    req.session.passport.user.securityCoEmail = user.securityCoEmail;
+    res.send({ success: true });
+  })
+});
+
+router.post('/user/alert-security', ensureLoggedIn, (req, res) => {
+  let securityCoEmail = req.user.securityCoEmail;
+  let userName = req.user.name;
+
+  if (!securityCoEmail)
+    res.send({ success: false, message: "Please set your security company email!" });
+
+  // TODO: uncomment this when go live
+  //var response = emailService.sendMail(securityCoEmail, userName);
+
+  // testing purposes
+  var response = { success: Math.random() > 0.5, message: "ERRRRROOORRR" };
+
+  if (response.success) {
+    res.send({ success: true, message: "Email notification successfully sent to " + securityCoEmail });
+  } else {
+    res.send({ success: false, message: response.message });
+  }
 });
 
 module.exports = router;
