@@ -13,7 +13,7 @@ let log = console.log.bind(console);
 
 var s3uploadService = {};
 
-s3uploadService.uploadFile = (directory, fileName) => {
+s3Service.uploadFile = (directory, fileName) => {
     let filePath = path.join(directory, fileName);
     log(`s3 upload of ${fileName} started`);
     fs.readFile(filePath, function (err, data) {
@@ -31,7 +31,7 @@ s3uploadService.uploadFile = (directory, fileName) => {
     });
 }
 
-s3uploadService.getAllFileNames = (callback) => {
+s3Service.getAllFileNames = (callback) => {
     s3.listObjects({ Bucket: bucketName }, (err, data) => {
         var keys = data.Contents.map((val) => {
             return val.Key
@@ -41,4 +41,4 @@ s3uploadService.getAllFileNames = (callback) => {
     });
 }
 
-module.exports = s3uploadService;
+module.exports = s3Service;
