@@ -12,8 +12,10 @@ router.get('/register', (req, res) => {
 });
 
 router.post('/register', (req, res) => {
-  if (req.body.password !== req.body.confirmPassword)
-    res.redirect('register', { error: 'Passwords do not match!' });
+  if (req.body.password !== req.body.confirmPassword) {
+    res.send({ success: false, message: 'Passwords do not match!' });
+    return;
+  }
 
   var user = new User({
     username: req.body.username,
@@ -22,7 +24,7 @@ router.post('/register', (req, res) => {
 
   User.register(user, req.body.password, (err, user) => {
     if (err) {
-      return res.render('register', { error: err.message });
+      return res.send({ success: false, message: err.message });
     }
 
     passport.authenticate('local')(req, res, () => {
@@ -30,7 +32,7 @@ router.post('/register', (req, res) => {
         if (err) {
           return next(err);
         }
-        res.redirect('/');
+        res.send({ success: true, message: "User registered successfully" })
       });
     });
   });
