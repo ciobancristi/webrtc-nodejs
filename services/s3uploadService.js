@@ -7,38 +7,13 @@ const AWS = require('aws-sdk'),
     fs = require('fs'),
     path = require('path')
 
-const bucketName = 'web-rtc-license-video-storage';
+const bucketName = process.env.S3_BUCKET;
 
 let log = console.log.bind(console);
 
 var s3uploadService = {};
 
 s3uploadService.uploadFile = (directory, fileName) => {
-    // let filePath = path.join(directory, fileName);
-    // var read = fs.createReadStream(filePath);
-    // var compress = zlib.createGzip();
-    // log(`s3 upload of ${fileName} started`);
-    // var upload = s3Stream.upload({
-    //     Bucket: bucket,
-    //     Key: fileName,
-    //     ACL:'public-read'
-    // });
-
-    // upload.on('error', function (error) {
-    //     log('s3 upload error ', error);
-    // });
-
-    // upload.on('part', function (details) {
-    //     log('s3 upload part ', details);
-    // });
-
-    // upload.on('uploaded', function (details) {
-    //     log('s3 uploaded ', details);
-    // });
-
-    // // Pipe the incoming filestream through compression, and up to S3.
-    // read.pipe(compress).pipe(upload);
-
     let filePath = path.join(directory, fileName);
     log(`s3 upload of ${fileName} started`);
     fs.readFile(filePath, function (err, data) {

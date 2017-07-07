@@ -110,10 +110,6 @@
         connection.currentRecorder = RecordRTC(event.stream, options);
     };
 
-    // document.getElementById('open-or-join').onclick = function () {
-    //     startBroadcast();
-    // };
-
     var startBroadcast = () => {
         // TODO:  replace with custom userid
         let broadcastId = document.getElementById('broadcast-id').value;
