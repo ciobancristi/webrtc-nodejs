@@ -18,5 +18,19 @@ $(document).ready(() => {
             (data) => {
                 $('#user-details-alert').show();
             });
+    });
+    $('#registration-form').submit((e) =>{
+        e.preventDefault();
+        $.post('/register',
+            $('#registration-form').serialize(),
+            (response) => {
+                if(!response.success){
+                    toastr.error(response.message);
+                }else{
+                    toastr.success(response.message);
+                    window.location.href = '/';
+                }
+            }
+        )
     })
 })
