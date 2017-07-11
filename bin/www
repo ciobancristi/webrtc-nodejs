@@ -7,6 +7,22 @@
 var app = require('../app');
 var debug = require('debug')('nodejs-regular-webapp2:server');
 var http = require('http');
+var fs = require('fs');
+var path = require('path');
+
+var useHTTPs = true;
+var httpModule = require(useHTTPs ? 'https' : 'http');
+
+function resolveURL(url) {
+    var isWin = !!process.platform.match(/^win/);
+    if (!isWin) return url;
+    return url.replace(/\//g, '\\');
+}
+
+var options = {
+    key: fs.readFileSync(path.join(__dirname, resolveURL('../fake-keys/privatekey.pem'))),
+    cert: fs.readFileSync(path.join(__dirname, resolveURL('../fake-keys/certificate.pem')))
+};
 
 /**
  * Get port from environment and store in Express.
@@ -19,7 +35,13 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+var server;
+
+if (useHTTPs) {
+    server = httpModule.createServer(options, app);
+} else {
+    server = httpModule.createServer(app);
+}
 
 // use Signaling Server
 require('../Signaling-Server.js')(server);
