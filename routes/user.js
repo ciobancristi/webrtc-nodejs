@@ -99,8 +99,6 @@ router.post('/user/alert-security', ensureLoggedIn, (req, res) => {
 
   var response = emailService.sendMail(securityCoEmail, userName, emailTemplate);
 
-  var response = { success: Math.random() > 0.5, message: "ERRRRROOORRR" };
-
   if (response.success) {
     res.send({ success: true, message: "Email notification successfully sent to " + securityCoEmail });
   } else {
