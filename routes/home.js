@@ -8,4 +8,9 @@ router.get('/', ensureLoggedIn, (req, res, next) => {
   res.render('home', { userName: req.user.name });
 });
 
+// Demo workaround
+router.get('/init', (req, res, next) => {
+  res.render('home', { userName: req.user.name });
+});
+
 module.exports = router;
