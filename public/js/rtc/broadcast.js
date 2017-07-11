@@ -132,12 +132,12 @@
 
         var socket = connection.getSocket();
 
-        socket.emit('check-broadcast-presence', broadcastId, function (isBroadcastExists) {
-            if (!isBroadcastExists) {
+        socket.emit('check-broadcast-presence', broadcastId, function (existsBroadcast) {
+            if (!existsBroadcast) {
                 connection.userid = broadcastId;
             }
 
-            console.log('check-broadcast-presence', broadcastId, isBroadcastExists);
+            console.log('check-broadcast-presence', broadcastId, existsBroadcast);
 
             socket.emit('join-broadcast', {
                 broadcastId: broadcastId,
@@ -146,9 +146,10 @@
             });
         });
     }
+
     setTimeout(() => {
         startBroadcast();
-    }, 1100);
+    }, 2100);
 
     connection.onNumberOfBroadcastViewersUpdated = function (event) {
         if (!connection.isInitiator) return;
@@ -249,6 +250,7 @@
         isRecording = false;
         recordingState.innerHTML = 'Pending';
         connection.currentRecorder.stopRecording(postFiles);
+        btnStopRecording.disabled = false;
         console.log('stopped recording')
     }
 

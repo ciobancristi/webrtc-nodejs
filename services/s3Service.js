@@ -11,7 +11,7 @@ const bucketName = process.env.S3_BUCKET;
 
 let log = console.log.bind(console);
 
-var s3uploadService = {};
+var s3Service = {};
 
 s3Service.uploadFile = (directory, fileName) => {
     let filePath = path.join(directory, fileName);

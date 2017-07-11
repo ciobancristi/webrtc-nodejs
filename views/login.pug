@@ -1,20 +1,23 @@
 extends layout
 
 block content
-  div(id="root" style="width: 280px; margin: 40px auto; padding: 10px;")
+  div
+    div(id="root" style="width: 280px; margin: 100px auto; padding: 10px;")
 
-    form.form-signin(method='POST', action='/login')
-
-      h2.form-signin-heading.text-center Sign in
-      .form-group
-        label.sr-only(for='username') Username
-        input.form-control(type='text', id='username', placeholder='Username', name='username', required='', autofocus='')
-      .form-group
-        label.sr-only(for='password') Password
-        input.form-control(type='password', id='password', placeholder='Password', name='password', required='')
-      if(message)
-        .alert.alert-danger(role='alert')
-          span.glyphicon.glyphicon-exclamation-sign(aria-hidden='true')
-          span.sr-only Error:
-          =message
-      button.btn.btn-lg.btn-primary.btn-block(type='submit') Sign in
+      form.form-signin(method='POST', action='/login')
+        h1.form-signin-heading.text-center.margin-10 Sign in
+        .form-group
+          label.sr-only(for='username') Username
+          input.form-control(type='text', id='username', placeholder='Username', name='username', required='', autofocus='')
+        .form-group
+          label.sr-only(for='password') Password
+          input.form-control(type='password', id='password', placeholder='Password', name='password', required='')
+        if(message)
+          .alert.alert-danger(role='alert')
+            span.glyphicon.glyphicon-exclamation-sign(aria-hidden='true')
+            span.sr-only Error:
+            =message
+        .form-group
+          button.btn.btn-lg.btn-primary.btn-block(type='submit') Sign in
+        .text-center.margin-10.register-link
+          a(href="/register") Create an account

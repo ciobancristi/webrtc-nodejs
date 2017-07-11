@@ -9,7 +9,7 @@
  * 
  */
 
-; (function (App) {
+(function (App) {
 
 	"use strict";
 

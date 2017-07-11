@@ -1,6 +1,6 @@
 'use strict';
 
-const s3uploadService = require('./../services/s3uploadService');
+const s3Service = require('./../services/s3Service');
 
 var recordingService = {};
 
@@ -28,7 +28,7 @@ recordingService.stripFileExtension = (value) => {
 }
 
 recordingService.getRecordingViewModels = (request, callback) => {
-    s3uploadService.getAllFileNames((videos) => {
+    s3Service.getAllFileNames((videos) => {
         let viewModels = mapRecordingViewModels(request, videos);
         return callback(viewModels);
     })
