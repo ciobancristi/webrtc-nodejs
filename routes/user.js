@@ -97,10 +97,8 @@ router.post('/user/alert-security', ensureLoggedIn, (req, res) => {
   if (!securityCoEmail)
     res.send({ success: false, message: "Please set your security company email!" });
 
-  // TODO: uncomment this when go live
-  //var response = emailService.sendMail(securityCoEmail, userName, emailTemplate);
+  var response = emailService.sendMail(securityCoEmail, userName, emailTemplate);
 
-  // testing purposes
   var response = { success: Math.random() > 0.5, message: "ERRRRROOORRR" };
 
   if (response.success) {
