@@ -10,7 +10,7 @@ router.get('/', ensureLoggedIn, (req, res, next) => {
 
 // Demo workaround
 router.get('/init', (req, res, next) => {
-  res.render('init', { userName: req.user.name });
+  res.render('init');
 });
 
 module.exports = router;
