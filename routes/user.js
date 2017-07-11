@@ -97,13 +97,14 @@ router.post('/user/alert-security', ensureLoggedIn, (req, res) => {
   if (!securityCoEmail)
     res.send({ success: false, message: "Please set your security company email!" });
 
-  var response = emailService.sendMail(securityCoEmail, userName, emailTemplate);
+  emailService.sendMail(securityCoEmail, userName, emailTemplate, (response) => {
 
-  if (response.success) {
-    res.send({ success: true, message: "Email notification successfully sent to " + securityCoEmail });
-  } else {
-    res.send({ success: false, message: response.message });
-  }
+    if (response.success) {
+      res.send({ success: true, message: "Email notification successfully sent to " + securityCoEmail });
+    } else {
+      res.send({ success: false, message: response.message });
+    }
+  });
 });
 
 module.exports = router;

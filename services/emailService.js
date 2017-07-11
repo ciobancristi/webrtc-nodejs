@@ -25,12 +25,10 @@ let prepareEmail = (to, clientName) => {
 
 var emailService = {};
 
-emailService.sendMail = (to, clientName, userEmailTemplate) => {
-    let emailTemplate;
+emailService.sendMail = (to, clientName, userEmailTemplate, callback) => {
+    let emailTemplate = prepareEmail(to, clientName);
     if (userEmailTemplate) {
-        emailTemplate = userEmailTemplate;
-    } else {
-        emailTemplate = prepareEmail(to, clientName);
+        emailTemplate.html = userEmailTemplate;
     }
 
     if (!emailTemplate.to || !emailTemplate.html) {
@@ -40,11 +38,12 @@ emailService.sendMail = (to, clientName, userEmailTemplate) => {
     transporter.sendMail(emailTemplate, (error, info) => {
         if (error) {
             console.log(error);
-            return { success: false, message: error };
+            return callback({ success: false, message: error });
         }
         console.log('Email %s sent: %s', info.messageId, info.response);
-        return { success: true };
-    });
+        return callback({ success: true });
+    })
+
 }
 
 module.exports = emailService;
