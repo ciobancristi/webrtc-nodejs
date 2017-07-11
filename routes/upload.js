@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 const formidable = require('formidable');
 const path = require('path');
-const s3uploadService = require('./../services/s3uploadService');
+const s3Service = require('./../services/s3Service');
 const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn('/login');
 
 let log = console.log.bind(console);
@@ -38,7 +38,7 @@ router.post('/', ensureLoggedIn, (req, res) => {
 
   form.on('end', () => {
     log('-> disk upload done');
-    s3uploadService.uploadFile(uploadsFolderPath, fileName);
+    s3Service.uploadFile(uploadsFolderPath, fileName);
   });
 });
 

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "WebRTC NodeJs",
   "repository": "git://github.com/ciobancristi/webrtc-nodejs",
-  "author": "Auth0",
+  "author": "Cristian Andrei Cioban",
   "license": "MIT",
   "scripts": {
     "start": "node ./bin/www"
